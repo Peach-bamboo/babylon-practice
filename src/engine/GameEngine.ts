@@ -1,6 +1,7 @@
 import * as BABYLON from 'babylonjs';
 import 'babylonjs-loaders';
 import { Character } from './Character';
+import { Ground } from './Ground';
 
 class GameEngine {
   private canvas: HTMLCanvasElement;
@@ -8,6 +9,7 @@ class GameEngine {
   private scene: BABYLON.Scene;
   private character: Character | null = null;
   private keys: { [key: string]: boolean } = {};
+  myGround: BABYLON.AbstractMesh | undefined;
 
   constructor(canvas: HTMLCanvasElement) {
     this.canvas = canvas;
@@ -29,7 +31,6 @@ class GameEngine {
   }
 
   private setupScene(): void {
-    this.scene.debugLayer.show();
     new BABYLON.HemisphericLight('light', new BABYLON.Vector3(1, 1, 0), this.scene);
     const camera = new BABYLON.ArcRotateCamera('camera', 0, 0, 10, BABYLON.Vector3.Zero(), this.scene);
     camera.attachControl(this.canvas, true);
@@ -43,10 +44,39 @@ class GameEngine {
         // console.log('Mesh:', mesh.name, mesh);
       });
       this.setupCharacter(scene);
+      // this.loadGround(scene)
     }, null, (_scene, message) => {
       console.error("Failed to load the model:", message);
     });
   }
+  private loadGround(scene: BABYLON.Scene): void {
+
+    // 创建地形
+    this.myGround = BABYLON.MeshBuilder.CreateGroundFromHeightMap("ground", "https://www.babylonjs-playground.com/textures/heightMap.png", {
+      width: 100,
+      height: 100,
+      subdivisions: 50,
+      minHeight: 0,
+      maxHeight: 10,
+      onReady: (mesh) => {
+        // 确保地形加载完成后再进行操作
+        mesh.position.y = 0;
+
+        // 使用 onBeforeRenderObservable 更新角色位置
+        scene.onBeforeRenderObservable.add(() => {
+          const characterMesh = scene.meshes.find(mesh => mesh.name === "__root__") as BABYLON.Mesh | undefined;
+          if (characterMesh && mesh) {
+            new Ground(characterMesh, mesh, scene);
+          }
+        })
+      }
+    }, scene);
+
+
+
+  }
+
+
 
   private setupCharacter(scene: BABYLON.Scene): void {
     const characterMesh = scene.meshes.find(mesh => mesh.name === "__root__") as BABYLON.Mesh | undefined;
@@ -95,10 +125,10 @@ class GameEngine {
     // const wall4 = this.createAirWall(scene, new BABYLON.Vector3(-5, 0, 0), { height: 10, width: 10, depth: 2 });
 
     scene.collisionsEnabled = true;
-    if(this.character){
+    if (this.character) {
       this.character.changeCheckCollisions(true);
     }
-    
+
   }
 }
 
