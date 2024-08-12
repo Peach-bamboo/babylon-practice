@@ -6,7 +6,8 @@
 
 <script lang="ts">
 import { defineComponent, onMounted, ref } from 'vue';
-import { GameEngine } from '../engine/GameEngine';
+// import { GameEngine } from '../engine/noUse/GameEngine';
+import { Init } from '../engine/Init';
 
 export default defineComponent({
   name: 'GameComponent',
@@ -15,7 +16,8 @@ export default defineComponent({
 
     onMounted(() => {
       if (gameCanvas.value) {
-        new GameEngine(gameCanvas.value);
+        // new GameEngine(gameCanvas.value);
+        new Init(gameCanvas.value);
       }
     });
 

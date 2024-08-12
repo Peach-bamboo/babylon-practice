@@ -3,11 +3,10 @@ class Ground {
     character: BABYLON.Mesh;
     ground: BABYLON.AbstractMesh;
     scene: BABYLON.Scene;
-    constructor(character:BABYLON.Mesh,ground:BABYLON.AbstractMesh,scene: BABYLON.Scene) {
+    constructor(character:BABYLON.Mesh,scene: BABYLON.Scene) {
         this.scene = scene
-        this.ground = ground
         this.character = character;
-        
+        this.ground = BABYLON.MeshBuilder.CreateGround("ground", {height: 1.5, width: 2.5, subdivisions: 4});
         this.update()
     }
     update():void {

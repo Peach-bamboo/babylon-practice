@@ -1,7 +1,7 @@
 import * as BABYLON from 'babylonjs';
 import 'babylonjs-loaders';
 import { Character } from './Character';
-import { Ground } from './Ground';
+import { Ground } from '../Ground';
 
 class GameEngine {
   private canvas: HTMLCanvasElement;

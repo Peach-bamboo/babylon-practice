@@ -1,7 +1,7 @@
 import * as BABYLON from 'babylonjs';
 import { Vector3 } from 'babylonjs';
 import { StateMachine } from './StateMachine';
-import { EnterController } from './Enter_controller';
+import { EnterController } from '../Enter_controller';
 
 
 class Character {

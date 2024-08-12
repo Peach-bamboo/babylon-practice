@@ -2,7 +2,7 @@ import * as BABYLON from 'babylonjs';
 import 'babylonjs-loaders';
 import { WallSizeType } from './types';
 
-export class Wall_controller {
+export class WallController {
     private scene: BABYLON.Scene;
     private wallSize1:WallSizeType = {
         height: 1, width: 1, depth: 1
